@@ -1,0 +1,43 @@
+{
+  "name": "green-road",
+  "version": "1.0.0",
+  "main": "source/server.ts",
+  "scripts": {
+    "migrate:make": "npx knex migrate:make --migrations-directory db/migrations -x ts",
+    "migrate:latest": "npx knex migrate:latest --knexfile db/knexfile.ts",
+    "migrate:rollback": "npx knex migrate:rollback --knexfile db/knexfile.ts",
+    "start": "nodemon source/server.ts",
+    "dev": "nodemon source/server.ts",
+    "build": "rm -rf build/ && prettier --write source/ && tsc"
+  },
+  "author": "Sina Monajemi",
+  "license": "MIT",
+  "dependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/body-parser": "^1.19.1",
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/morgan": "^1.9.3",
+    "axios": "^0.22.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.1",
+    "knex": "^0.95.11",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.13",
+    "pg": "^8.7.1",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3",
+    "uuidv4": "^6.2.12"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smonajemi/green-road.git"
+  },
+  "bugs": {
+    "url": "https://github.com/smonajemi/green-road/issues"
+  },
+  "homepage": "https://github.com/smonajemi/green-road#readme",
+  "description": "Install extension in vs code: ERD Editor",
+  "keywords": []
+}
