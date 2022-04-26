@@ -60,7 +60,6 @@ export const authenticateUser = async (
 ) => {
   try {
     const {userName, password} = req.body;
-    console.log(userName)
     const user = await userService.loginUser(userName, password)
     res.send(user);
   }  catch (err) {
