@@ -25,11 +25,23 @@ export const findUserById = async (userId: string): Promise<User> => {
 export const findUserByEmail = async (email: string): Promise<User | null> => {
   const user = await userRepository.fetchUserByEmail(email);
   if (!user) {
-    return null;
+    throw new Error(`User with ${email} does not exist`);
   }
   const response = mapUserFromUserEntity(user);
   return response;
 };
+
+export const loginUser = async (userName: string, password: string): Promise<User | null> => {
+  const existingUser = await findUserByEmail(userName)
+  if (!existingUser) {
+    throw new Error('Invalid Username or Password')
+  }
+
+  const userEntity = mapUserEntityFromUser(existingUser)
+  const [db_response] = await userRepository.updateUser(existingUser.id as any, userEntity)
+  const response = mapUserFromUserEntity(db_response)
+  return {...response}
+}
 
 export const createUser = async (
   user: User,

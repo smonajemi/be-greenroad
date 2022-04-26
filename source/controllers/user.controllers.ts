@@ -52,6 +52,53 @@ export const getUser = async (
   }
 };
 
+// authenticate user
+export const authenticateUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const {userName, password} = req.body;
+    console.log(userName)
+    const user = await userService.loginUser(userName, password)
+    res.send(user);
+  }  catch (err) {
+    let error = "";
+    for (const [key, value] of Object.entries([err])) {
+      error = `${value}`;
+    }
+    res.json({
+      message: error,
+      root: filename
+    });
+    next(error);
+  }
+}
+
+// getting a single user
+export const getEmail = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { email } = req.params;
+    const user = await userService.findUserByEmail(email);
+    req.body = user;
+    res.send(req.body);
+  } catch (err) {
+    let error = "";
+    for (const [key, value] of Object.entries([err])) {
+      error = `${value}`;
+    }
+    res.json({
+      message: error,
+      root: filename
+    });
+    next(error);
+  }
+};
 // adding a user
 export const createUser = async (
   req: Request,
