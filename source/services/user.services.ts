@@ -10,7 +10,7 @@ import { findRoleByUserId, createRole } from "../services/role.services";
 
 export const fetchUsers = async (): Promise<User[] | any> => {
   const result = await userRepository.fetchUsers();
-  return { ...result };
+  return result; 
 };
 
 export const findUserById = async (userId: string): Promise<User> => {
@@ -25,7 +25,7 @@ export const findUserById = async (userId: string): Promise<User> => {
 export const findUserByEmail = async (email: string): Promise<User | null> => {
   const user = await userRepository.fetchUserByEmail(email);
   if (!user) {
-    throw new Error(`User with ${email} does not exist`);
+    return null;
   }
   const response = mapUserFromUserEntity(user);
   return response;
