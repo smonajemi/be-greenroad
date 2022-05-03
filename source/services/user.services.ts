@@ -40,7 +40,7 @@ export const loginUser = async (userName: string, password: string): Promise<Use
   const userEntity = mapUserEntityFromUser(existingUser)
   const [db_response] = await userRepository.updateUser(existingUser.id as any, userEntity)
   const response = mapUserFromUserEntity(db_response)
-  return {...response}
+  return response
 }
 
 export const createUser = async (
