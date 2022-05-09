@@ -2,18 +2,16 @@ import { Entity, BusinessObject } from "./default/default.types";
 
 export interface User extends BusinessObject {
   id?: string;
-  userName: string;
+  username: string;
   firstName: string;
   lastName: string;
-  password: number;
-  isDeleted: boolean;
+  password: string;
 }
 
 export interface UserEntity extends Entity {
   id?: string;
-  user_name: string;
+  username: string;
   first_name: string;
   last_name: string;
-  password: number;
-  is_deleted: boolean;
+  password: string;
 }

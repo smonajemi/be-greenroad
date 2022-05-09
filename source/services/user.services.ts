@@ -7,7 +7,7 @@ import {
 } from "../mappers/user.mappers";
 import { Role, RoleEntity } from "../types/role.types";
 import { findRoleByUserId, createRole } from "../services/role.services";
-
+import bcrypt from 'bcrypt'
 export const fetchUsers = async (): Promise<User[] | any> => {
   const result = await userRepository.fetchUsers();
   return result; 
@@ -34,9 +34,12 @@ export const findUserByEmail = async (email: string): Promise<User | null> => {
 export const loginUser = async (userName: string, password: string): Promise<User | null> => {
   const existingUser = await findUserByEmail(userName)
   if (!existingUser) {
-    throw new Error('Invalid Username or Password')
+    throw new Error('Invalid Username')
   }
-
+  const validPassword = await bcrypt.compare(password, existingUser.password);
+  if (!validPassword) {
+    throw new Error('Invalid Password')
+  } 
   const userEntity = mapUserEntityFromUser(existingUser)
   const [db_response] = await userRepository.updateUser(existingUser.id as any, userEntity)
   const response = mapUserFromUserEntity(db_response)
@@ -48,12 +51,15 @@ export const createUser = async (
   role?: Role
 ): Promise<User | any> => {
 
-  const existingUser = await findUserByEmail(user.userName);
+  const existingUser = await findUserByEmail(user.username);
   if (existingUser) {
-    throw new Error(`User ${user.userName} already exists`);
+    throw new Error(`User ${user.username} already exists`);
   }
   const getRole = user as any
   const userEntity = mapUserEntityFromUser(user);
+  const salt = await bcrypt.genSalt(10);
+
+  userEntity.password = user.password && user.password !== '' ?  await bcrypt.hash(user.password, salt) : ''
   const [db_response] = await userRepository.createUser(userEntity);
   const newProfile: Role = role
     ? role
