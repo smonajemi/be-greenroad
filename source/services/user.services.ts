@@ -31,8 +31,8 @@ export const findUserByEmail = async (email: string): Promise<User | null> => {
   return response;
 };
 
-export const loginUser = async (userName: string, password: string): Promise<User | null> => {
-  const existingUser = await findUserByEmail(userName)
+export const loginUser = async (username: string, password: string): Promise<User | null> => {
+  const existingUser = await findUserByEmail(username)
   if (!existingUser) {
     throw new Error('Invalid Username')
   }
@@ -58,7 +58,6 @@ export const createUser = async (
   const getRole = user as any
   const userEntity = mapUserEntityFromUser(user);
   const salt = await bcrypt.genSalt(10);
-
   userEntity.password = user.password && user.password !== '' ?  await bcrypt.hash(user.password, salt) : ''
   const [db_response] = await userRepository.createUser(userEntity);
   const newProfile: Role = role

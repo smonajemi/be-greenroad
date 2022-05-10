@@ -1,10 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import * as userService from "../services/user.services";
-import { User } from "../types/user.types";
-import axios, { AxiosResponse } from "axios";
 import path from "path";
-const filename = path.basename(__filename)
 
+const filename = path.basename(__filename)
 // getting all users
 export const getUsers = async (
   req: Request,
@@ -59,8 +57,8 @@ export const authenticateUser = async (
   next: NextFunction
 ) => {
   try {
-    const {userName, password} = req.body;
-    const user = await userService.loginUser(userName, password)
+    const {username, password} = req.body;
+    const user = await userService.loginUser(username, password)
     res.send(user);
   }  catch (err) {
     let error = "";
@@ -110,14 +108,20 @@ export const createUser = async (
     res.send(req.body);
   } catch (err) {
     let error = "";
-    for (const [key, value] of Object.entries([err])) {
-      error = `${value}`;
+  //   for (const [key, value] of Object.entries([err])) {
+  //     error = `${value}`;
+  //   }
+  //  console.log( Object.entries([err]))
+    for(const e of [err]) {
+      error = `${e}`;
+      break
     }
     res.json({
       message: error,
       root: filename
     });
     next(error);
+  // res.send()
   }
 };
 
