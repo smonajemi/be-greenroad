@@ -108,10 +108,6 @@ export const createUser = async (
     res.send(req.body);
   } catch (err) {
     let error = "";
-  //   for (const [key, value] of Object.entries([err])) {
-  //     error = `${value}`;
-  //   }
-  //  console.log( Object.entries([err]))
     for(const e of [err]) {
       error = `${e}`;
       break
@@ -121,7 +117,6 @@ export const createUser = async (
       root: filename
     });
     next(error);
-  // res.send()
   }
 };
 
