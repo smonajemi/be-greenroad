@@ -73,8 +73,12 @@ export const createUser = async (
   return { ...response, roleEntity: result };
 };
 
-export const updateUser = async (userId: string, user: User): Promise<User> => {
+export const updateUser = async (userId: string, user: User, type?: string): Promise<User> => {
   const userEntity = mapUserEntityFromUser(user);
+  if (type === 'password') {
+    const salt = await bcrypt.genSalt(10);
+    userEntity.password = user.password && user.password !== '' ?  await bcrypt.hash(user.password, salt) : ''
+  }
   const [db_response] = await userRepository.updateUser(userId, userEntity);
   const response = mapUserFromUserEntity(db_response);
   return response;

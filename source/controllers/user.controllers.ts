@@ -127,8 +127,9 @@ export const updateUser = async (
   next: NextFunction
 ) => {
   try {
-    const { userId } = req.params;
-    const user = await userService.updateUser(userId, req.body);
+    const { userId} = req.params;
+    const { type } = req.query;
+    const user = await userService.updateUser(userId, req.body, type as any);
     req.body = user;
     res.send(req.body);
   } catch (err) {
