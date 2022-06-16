@@ -15,7 +15,7 @@ router.use(express.urlencoded({ extended: false }));
 router.use(express.json());
 router.use(cors())
 
-/** RULES OF OUR API */
+/** API RULES */
 router.use((req, res, next) => {
     res.setHeader('Content-Type', 'application/json');
     res.header('Access-Control-Allow-Origin', '*');
@@ -35,7 +35,7 @@ router.use('/', routes);
 /** Success */
 router.use('/', async (req, res, next) => {
     return res.status(200).json({
-        success: 'Backend is working'
+        success: 'Success'
     });
 });
 
