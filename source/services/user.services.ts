@@ -41,8 +41,8 @@ export const loginUser = async (username: string, password: string): Promise<Use
     throw new Error('Invalid Password')
   } 
   const userEntity = mapUserEntityFromUser(existingUser)
-  const [db_response] = await userRepository.updateUser(existingUser.id as any, userEntity)
-  const response = mapUserFromUserEntity(db_response)
+  const [db_res] = await userRepository.updateUser(existingUser.id as any, userEntity)
+  const response = mapUserFromUserEntity(db_res)
   return response
 }
 
@@ -51,25 +51,26 @@ export const createUser = async (
   role?: Role
 ): Promise<User | any> => {
 
+  const salt = await bcrypt.genSalt(10);
+
   const existingUser = await findUserByEmail(user.username);
   if (existingUser) {
     throw new Error(`User ${user.username} already exists`);
   }
   const getRole = user as any
   const userEntity = mapUserEntityFromUser(user);
-  const salt = await bcrypt.genSalt(10);
   userEntity.password = user.password && user.password !== '' ?  await bcrypt.hash(user.password, salt) : ''
-  const [db_response] = await userRepository.createUser(userEntity);
+  const [db_res] = await userRepository.createUser(userEntity);
   const newProfile: Role = role
     ? role
     : {
-      userId: db_response.id as string,
+      userId: db_res.id as string,
       role: getRole.role,
       isDeleted: false,
     };
   const profile = await findRoleByUserId(newProfile.userId);
   const result = profile ? profile : await createRole(newProfile);
-  const response = mapUserFromUserEntity(db_response);
+  const response = mapUserFromUserEntity(db_res);
   return { ...response, roleEntity: result };
 };
 
@@ -79,8 +80,8 @@ export const updateUser = async (userId: string, user: User, type?: string): Pro
     const salt = await bcrypt.genSalt(10);
     userEntity.password = user.password && user.password !== '' ?  await bcrypt.hash(user.password, salt) : ''
   }
-  const [db_response] = await userRepository.updateUser(userId, userEntity);
-  const response = mapUserFromUserEntity(db_response);
+  const [db_res] = await userRepository.updateUser(userId, userEntity);
+  const response = mapUserFromUserEntity(db_res);
   return response;
 };
 
@@ -94,7 +95,7 @@ export const deleteUser = async (userId: string): Promise<User | any> => {
   roleEntity.is_deleted = true
   roleEntity.deleted_at = new Date().toISOString()
   await roleRepository.updateRole(userId, roleEntity.id as string, roleEntity)
-  const [db_response] = await userRepository.deleteUser(userId);
-  const response = mapUserFromUserEntity(db_response);
+  const [db_res] = await userRepository.deleteUser(userId);
+  const response = mapUserFromUserEntity(db_res);
   return { ...response, roleEntity: roleEntity }
 };
