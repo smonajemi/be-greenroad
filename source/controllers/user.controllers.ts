@@ -26,7 +26,7 @@ export const getUsers = async (
   }
 };
 
-// getting a single user
+// get user
 export const getUser = async (
   req: Request,
   res: Response,
@@ -73,7 +73,7 @@ export const authenticateUser = async (
   }
 }
 
-// getting a single user
+// find user 
 export const getEmail = async (
   req: Request,
   res: Response,
@@ -96,7 +96,7 @@ export const getEmail = async (
     next(error);
   }
 };
-// adding a user
+// create user
 export const createUser = async (
   req: Request,
   res: Response,
@@ -120,7 +120,7 @@ export const createUser = async (
   }
 };
 
-// updating a user
+// update user 
 export const updateUser = async (
   req: Request,
   res: Response,
@@ -145,7 +145,7 @@ export const updateUser = async (
   }
 };
 
-// deleting a user
+// delete user
 export const deleteUser = async (
   req: Request,
   res: Response,
